@@ -1,0 +1,270 @@
+<html>
+    <head>
+        <title>Nolly</title>
+        <style>
+            body{ margin: 0; }
+            canvas{ width: 100%; height: 100%; }
+        </style>
+    </head>
+    <body>
+        <script src='three.js'></script>
+        <script src='OrbitControls.js'></script>
+        <script src="https://cdn.rawgit.com/mrdoob/three.js/master/examples/js/loaders/GLTFLoader.js"></script>
+
+        <script src="https://cdn.rawgit.com/mrdoob/three.js/master/examples/js/loaders/FBXLoader.js"></script>
+        <div id="world"></div>
+        <style>
+            body {
+                    background: linear-gradient(#242531, #24555e);
+                }
+        </style>
+        <script>
+            var scene = new THREE.Scene();
+            var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 ); 
+            var renderer = new THREE.WebGLRenderer({alpha: true, antialias: true});
+            renderer.setClearColor( 0xffffff, 0);
+            renderer.setSize( window.innerWidth, window.innerHeight)
+            document.body.appendChild( renderer.domElement );
+            window.addEventListener( 'resize', ()=>{
+                var width = window.innerWidth;
+                var height = window.innerHeight;
+                renderer.setSize( width, height );
+                camera.aspect = width / height;
+
+                camera.updateProjectionMatrix();
+            })
+            // let fog = new THREE.Fog({near: .01, far: 400})
+            // scene.fog = fog;
+
+
+
+
+            let matArr = [];
+            let texture_ft = new THREE.TextureLoader().load( 'skybox/space_ft.png');
+            let texture_bk = new THREE.TextureLoader().load( 'skybox/space_bk.png');
+            let texture_up = new THREE.TextureLoader().load( 'skybox/space_up.png');
+            let texture_dn = new THREE.TextureLoader().load( 'skybox/space_dn.png');
+            let texture_rt = new THREE.TextureLoader().load( 'skybox/space_rt.png');
+            let texture_lf = new THREE.TextureLoader().load( 'skybox/space_lf.png');
+            
+            matArr.push(new THREE.MeshBasicMaterial( { map: texture_ft }));
+            matArr.push(new THREE.MeshBasicMaterial( { map: texture_bk }));
+            matArr.push(new THREE.MeshBasicMaterial( { map: texture_up }));
+            matArr.push(new THREE.MeshBasicMaterial( { map: texture_dn }));
+            matArr.push(new THREE.MeshBasicMaterial( { map: texture_rt }));
+            matArr.push(new THREE.MeshBasicMaterial( { map: texture_lf }));
+   
+            var clock = new THREE.Clock();
+            for (let i = 0; i < 6; i++){
+                matArr[i].side = THREE.BackSide;
+            }
+            
+            let boxGeo = new THREE.BoxGeometry( 1000, 1000, 1000);
+            let skybox = new THREE.Mesh( boxGeo, matArr );
+            scene.add( skybox );
+
+            var hemisphereLight, shadowLight;
+
+
+            var loader = new THREE.GLTFLoader();
+            loader.load('space_ship/ship.gltf', handleLoad);
+            var jimbo;
+            function handleLoad(gltf) {
+                jimbo = gltf.scene;
+                scene.add(jimbo);
+            }
+            var controls = new THREE.OrbitControls( camera, renderer.domElement );
+            // document.addEventListener('mousemove', handleMouseMove, false);
+            function createLights() {
+                hemisphereLight = new THREE.HemisphereLight(0xaaaaaa,0x000000, .9)
+                shadowLight = new THREE.DirectionalLight(0xffffff, .9);
+                shadowLight.position.set(150, 350, 350);
+                shadowLight.castShadow = true;
+                shadowLight.shadow.camera.left = -400;
+                shadowLight.shadow.camera.right = 400;
+                shadowLight.shadow.camera.top = 400;
+                shadowLight.shadow.camera.bottom = -400;
+                shadowLight.shadow.camera.near = 1;
+                shadowLight.shadow.camera.far = 1000;
+                shadowLight.shadow.mapSize.width = 2048;
+                shadowLight.shadow.mapSize.height = 2048;
+                scene.add(hemisphereLight);  
+                scene.add(shadowLight);
+            }
+            createLights();
+            camera.position.z = 10;
+            camera.position.y = 4;
+            camera.rotation.x = -.3;
+            let moveRight;
+            let moveLeft;
+            let moveUp;
+            let moveDown;
+            Asteroids = function() {
+                this.mesh = new THREE.Object3D();
+
+                for (var i = 0; i < 1000; i++) {
+                    box = new THREE.BoxGeometry(10 + Math.random() + 30, Math.random() * 70, 30);
+                    white = new THREE.MeshPhongMaterial({color: 0xFFFFFF});
+
+                    box = new THREE.Mesh(box, white);
+                    box.rotation.z = Math.PI / (Math.random() * 4)
+
+
+                    box.position.set(Math.random() * 200,Math.random() * 200, Math.random() * 15000);
+                    // box.receiveShadow = true;
+
+                    this.mesh.add(box);
+                    // asteroidArray.push(RoadStrip);
+                }
+            }
+            var asteroids = new Asteroids();
+            scene.add(asteroids.mesh);
+            asteroids.mesh.position.z = -15000;
+            asteroids.mesh.position.x = -100;
+            asteroids.mesh.position.y = -100;
+
+
+            CosmicJunk = function() {
+                this.mesh = new THREE.Object3D();
+
+                for (var i = 0; i < 3000; i++) {
+                    box = new THREE.SphereGeometry(.1);
+                    white = new THREE.MeshPhongMaterial({color: 0xFFFFFF});
+
+                    box = new THREE.Mesh(box, white);
+
+                    box.position.set(Math.random() * 300,Math.random() * 300,i % 6000);
+                    // box.receiveShadow = true;
+
+                    this.mesh.add(box);
+                    // asteroidArray.push(RoadStrip);
+                }
+            }
+            var junk = new CosmicJunk();
+            scene.add(junk.mesh);
+            junk.mesh.position.z = -1000;
+            junk.mesh.position.x = -100;
+            junk.mesh.position.y = -100;
+
+
+            let move=()=>{
+
+                if(moveRight === false && jimbo.rotation.z > 0){
+                    jimbo.rotation.z -= .1
+                }
+                if(moveLeft === false && jimbo.rotation.z < 0){
+                    jimbo.rotation.z += .1
+                }
+                if(moveUp === false && jimbo.rotation.x > 0){
+                    jimbo.rotation.x -= .1
+                }
+                if(moveDown === false && jimbo.rotation.x < 0){
+                    jimbo.rotation.x += .1
+                }
+                
+                
+            document.addEventListener("keydown", onDocumentKeyDown, false);
+
+       
+           
+
+
+
+            
+
+
+
+            function onDocumentKeyDown(event) {
+                var keyCode = event.which;
+                if (keyCode === 68) {
+                    moveRight = true
+                } else if (keyCode === 65) {
+                    moveLeft = true;
+                }else if(keyCode === 87){
+                    moveUp = true
+                }else if(keyCode === 83){
+                    moveDown = true;
+                }
+            };
+            if (jimbo){
+                    jimbo.rotation.y = (Math.PI);
+                }
+
+            document.addEventListener("keyup", onDocumentKeyUp, false);
+            function onDocumentKeyUp(event){
+                moveRight = false;
+                moveLeft = false;
+                moveDown = false;
+                moveUp = false;
+            }
+
+
+                if (moveRight === true ){
+                    jimbo.position.x += .8;
+                    camera.position.x += .6;
+                    if (jimbo.rotation.z < .5){
+                        jimbo.rotation.z += .1;
+                    }
+                   
+                }
+                if(moveLeft === true){
+                    jimbo.position.x -= .8;
+                    camera.position.x -= .6;
+                    if (jimbo.rotation.z > -.5){
+                        jimbo.rotation.z -= .1;
+                    }
+                    
+                }
+                if (moveUp === true){
+                    jimbo.position.y += .8;
+                    camera.position.y += .7;
+                    if (jimbo.rotation.x < .5){
+                        jimbo.rotation.x += .1;
+                    }
+                   
+                }
+                if(moveDown === true){
+                    jimbo.position.y -= .8;
+                    camera.position.y -= .7;
+                    if (jimbo.rotation.x > -.5){
+                        jimbo.rotation.x -= .1;
+                    }
+                    debugger
+                    
+                }
+                
+            }
+
+            debugger
+            var update=()=>{
+                move();
+                // jimbo.rotation.z -= .01
+                // console.log(jimbo.rotation.z)
+                // console.log(moveLeft)
+                // console.log(moveRight)
+                // console.log(clock)
+                skybox.position.z -= 2;
+                jimbo.position.z -= 2;
+                camera.position.z -= 2;
+            };
+
+                
+          
+            //draw Scene
+            var render=()=>{
+                renderer.render( scene, camera)
+            }
+            // run game loop opdate render repeat
+            var GameLoop=()=>{
+                requestAnimationFrame( GameLoop );
+                update();
+                render();
+            };
+            GameLoop();
+        </script>
+    
+    </body>
+
+  
+
+</html>
