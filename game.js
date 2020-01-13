@@ -55,7 +55,7 @@
                 jimbo = gltf.scene;
                 scene.add(jimbo);
             }
-            var controls = new THREE.OrbitControls( camera, renderer.domElement );
+            // var controls = new THREE.OrbitControls( camera, renderer.domElement );
             // document.addEventListener('mousemove', handleMouseMove, false);
             function createLights() {
                 hemisphereLight = new THREE.HemisphereLight(0xaaaaaa,0x000000, .9)
