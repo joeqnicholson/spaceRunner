@@ -4,16 +4,16 @@
 
 ## Functionality and MVP
 
-    - Be able to move the main character, 'Jimbo' side to side with WASD
-    - Collision detection of obstacles
-    - Have an end game screen with the players score
-    - Replay the game
+- Be able to move the main character, 'Jimbo' side to side with WASD
+- Collision detection of obstacles
+- Have an end game screen with the players score
+- Replay the game
 
 ![Game](https://grimeo-seeds.s3.amazonaws.com/spaceRunner.png "game")
 
 ## Challenges
 
-    - Having an everchanging but fair set of obstacles for the player to traverse. Each time the game resets a function is called to instantiate 800 randomly sized and randomly placed cubes throughout the game world.
+- Having an everchanging but fair set of obstacles for the player to traverse. Each time the game resets a function is called to instantiate 800 randomly sized and randomly placed cubes throughout the game world.
 
 ```javascript
 function asteroids() {
@@ -40,7 +40,7 @@ function asteroids() {
 }
 asteroids();
 ```
-    - Having the ship tilt naturally when the player moves side to side. An unforseen challenge was having the ship return to it's neutral position after the movement had been performed.
+- Ensuring the ship tilts naturally when the player moves side to side. An unforseen challenge was having the ship return to it's neutral position after the movement had been performed.
 
 ```javascript
 let move=()=>{
