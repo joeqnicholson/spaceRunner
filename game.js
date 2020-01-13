@@ -124,11 +124,10 @@
 
 
                     box.position.set((Math.random() * 350) - 175,(Math.random() * 240) - 120, (Math.random() * -15000) - 600);
-                    // box.receiveShadow = true;
+
 
                     asteroidsArr.push(box);
-                    // debugger
-                    // asteroidArray.push(RoadStrip);
+
                 }
             }
             asteroids();
