@@ -1,4 +1,4 @@
-# Nolly
+# spaceRunner
 
 - spaceRunner is a javascript game made using only javascript, html, css and the 3js library. The obejective is to make it to the end of the game (15000 metres) without running into an obstacle
 
