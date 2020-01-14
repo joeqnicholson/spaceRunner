@@ -187,7 +187,7 @@
             CosmicJunk = function() {
                 this.mesh = new THREE.Object3D();
 
-                for (var i = 0; i < 3000; i++) {
+                for (var i = 0; i < 2500; i++) {
                     box = new THREE.SphereGeometry(.2);
                     white = new THREE.MeshPhongMaterial({color: 0xFFFFFF});
 
@@ -259,13 +259,13 @@
 
             function onDocumentKeyDown(event) {
                 var keyCode = event.which;
-                if (keyCode === 68) {
+                if (keyCode === 68 || keyCode === 39) {
                     moveRight = true
-                } else if (keyCode === 65) {
+                } else if (keyCode === 65 || keyCode === 37) {
                     moveLeft = true;
-                }else if(keyCode === 87){
+                }else if(keyCode === 87 || keyCode === 38){
                     moveUp = true
-                }else if(keyCode === 83){
+                }else if(keyCode === 83 || keyCode === 40){
                     moveDown = true;
                 }else if(keyCode === 32){
                     restartGame();
