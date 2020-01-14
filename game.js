@@ -111,8 +111,8 @@
             function asteroids() {
                 
                 
-                for (var i = 0; i < 800; i++) {
-                    box = new THREE.BoxGeometry(20 + Math.random() * 45, Math.random() * 90, 20 + Math.random() * 45);
+                for (var i = 0; i < 600; i++) {
+                    box = new THREE.BoxGeometry(16 + Math.random() * 21, Math.random() * 80, 15 + Math.random() * 20);
                     
                     
 
@@ -168,7 +168,8 @@
                 red.opacity = 1
                 orange.opacity = 1
                 pink.opacity = 1
-                speed = 2;
+                speed = 2; 
+                win = false;
                 
                 // jimbo.scale.x = 3;
                 gameOver = false;
@@ -186,7 +187,7 @@
             CosmicJunk = function() {
                 this.mesh = new THREE.Object3D();
 
-                for (var i = 0; i < 4000; i++) {
+                for (var i = 0; i < 3000; i++) {
                     box = new THREE.SphereGeometry(.2);
                     white = new THREE.MeshPhongMaterial({color: 0xFFFFFF});
 
@@ -420,7 +421,7 @@
                     camera.position.z -= speed;
                     skybox.position.z -= speed;
                 }
-                // console.log(jimbo.position.z)                
+          
 
                 var originPoint = colBox.position.clone();
                 
@@ -435,7 +436,6 @@
                     var collisionResults = ray.intersectObjects( collidableMesh );
                     if ( collisionResults.length > 0 && collisionResults[0].distance < directionVector.length()){
                         count++
-                        // console.log(count);
 
                     }
 
@@ -448,16 +448,10 @@
                     gameOver = true;
                 }
 
-                // if(jimbo.position.z < -15700){
-                //     restartGame();
-                // }
+
                 document.getElementById("score").innerHTML = 'DISTANCE = ' + Math.floor(-(jimbo.position.z)) ;
 
 
-
-
-
-                // console.log(collisionResults);
 
             };
 
