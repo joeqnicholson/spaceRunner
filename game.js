@@ -53,6 +53,7 @@
             var jimbo;
             function handleLoad(gltf) {
                 jimbo = gltf.scene;
+                jimbo.rotation.y = Math.PI;
                 scene.add(jimbo);
             }
             // var controls = new THREE.OrbitControls( camera, renderer.domElement );
@@ -271,12 +272,7 @@
                     restartGame();
                 }
             };
-            if (jimbo && loaded === false){
-                    loaded = true;
-                    jimbo.rotation.y = (Math.PI);
-                    console.clear();
-                }
-
+            
             document.addEventListener("keyup", onDocumentKeyUp, false);
             function onDocumentKeyUp(event){
                 moveRight = false;
@@ -413,7 +409,6 @@
                 winFunction();
                 move();
                 gameOverFunction()
-         
                 if(gameOver === false && win===false){
                     speed += .0005;
                     jimbo.position.z -= speed;
@@ -421,12 +416,7 @@
                     camera.position.z -= speed;
                     skybox.position.z -= speed;
                 }
-          
-
                 var originPoint = colBox.position.clone();
-                
-
-
                 for( let vertInd = 0; vertInd < colBox.geometry.vertices.length; vertInd ++){
                     var localVertex = colBox.geometry.vertices[vertInd].clone();
                     var globalVertex = localVertex.applyMatrix4( colBox.matrix );
@@ -440,20 +430,22 @@
                     }
 
                 }
-
-                
-
-
                 if (count > 8){
                     gameOver = true;
                 }
-
-
                 document.getElementById("score").innerHTML = 'DISTANCE = ' + Math.floor(-(jimbo.position.z)) ;
-
-
-
             };
+
+
+            if (jimbo && loaded === false){
+                loaded = true;
+                // jimbo.rotation.y = (Math.PI);
+                console.clear();
+            }
+            if(jimbo){
+                // jimbo.rotation.y = (Math.PI);
+            }
+
 
                 
           
